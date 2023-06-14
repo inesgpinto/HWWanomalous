@@ -1,0 +1,11 @@
+import model /lstore/titan/atlas/inesgpinto/mash/projeto/SMEFTsim_U35_MwScheme_UFO-SMlimit_massless
+generate a a > w+ w- h NP<=1 QED<=3, w+ > l+ vl, w- > l- vl~, h > b b~
+output CP_IMPAR
+launch
+shower = OFF 
+detector = OFF 
+analysis = OFF
+madspin = OFF
+reweight = OFF
+done 
+done
