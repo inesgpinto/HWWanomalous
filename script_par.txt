@@ -4,8 +4,13 @@ output CP_PAR
 launch
 shower = OFF 
 detector = OFF 
-analysis = OFF
+analysis = ExRoot
 madspin = OFF
 reweight = OFF
 done 
+set lpp1 2
+set lpp2 2
+set pdlabel1 none
+set pdlabel2 none
+set use_syst False
 done
