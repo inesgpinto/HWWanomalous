@@ -1,0 +1,117 @@
+<file>######################################################################
+## VALIDITY RULE FOR THE PARAM_CARD   ####
+######################################################################
+<zero>
+     ckmblock 2 # 
+     ckmblock 3 # 
+     ckmblock 4 # 
+     ckmblock 5 # 
+     smeft 1 # 
+     smeft 2 # 
+     smeft 3 # 
+     smeft 4 # 
+     smeft 5 # 
+     smeft 6 # 
+     smeft 8 # 
+     smeft 9 # 
+     smeft 10 # 
+     smeft 11 # 
+     smeft 12 # 
+     smeft 13 # 
+     smeft 14 # 
+     smeft 15 # 
+     smeft 16 # 
+     smeft 17 # 
+     smeft 18 # 
+     smeft 19 # 
+     smeft 20 # 
+     smeft 21 # 
+     smeft 22 # 
+     smeft 23 # 
+     smeft 24 # 
+     smeft 25 # 
+     smeft 26 # 
+     smeft 27 # 
+     smeft 28 # 
+     smeft 29 # 
+     smeft 30 # 
+     smeft 31 # 
+     smeft 32 # 
+     smeft 33 # 
+     smeft 34 # 
+     smeft 35 # 
+     smeft 36 # 
+     smeft 37 # 
+     smeft 38 # 
+     smeft 39 # 
+     smeft 40 # 
+     smeft 41 # 
+     smeft 42 # 
+     smeft 43 # 
+     smeft 44 # 
+     smeft 45 # 
+     smeft 46 # 
+     smeft 47 # 
+     smeft 48 # 
+     smeft 49 # 
+     smeft 50 # 
+     smeft 51 # 
+     smeft 52 # 
+     smeft 53 # 
+     smeft 54 # 
+     smeft 55 # 
+     smeft 56 # 
+     smeft 57 # 
+     smeft 58 # 
+     smeft 59 # 
+     smeft 60 # 
+     smeftcpv 1 # 
+     smeftcpv 2 # 
+     smeftcpv 3 # 
+     smeftcpv 4 # 
+     smeftcpv 5 # 
+     smeftcpv 6 # 
+     smeftcpv 7 # 
+     smeftcpv 8 # 
+     smeftcpv 9 # 
+     smeftcpv 10 # 
+     smeftcpv 11 # 
+     smeftcpv 12 # 
+     smeftcpv 13 # 
+     smeftcpv 14 # 
+     smeftcpv 15 # 
+     smeftcpv 16 # 
+     smeftcpv 17 # 
+     smeftcpv 18 # 
+     smeftcpv 19 # 
+     smeftcpv 20 # 
+     smeftcpv 21 # 
+     smeftcpv 22 # 
+     smeftcpv 23 # 
+     smeftcpv 24 # 
+     smeftcpv 25 # 
+     switches 1 # 
+     yukawa 1 # 
+     yukawa 2 # 
+     yukawa 3 # 
+     yukawa 4 # 
+     yukawa 11 # 
+     yukawa 13 # 
+     yukawa 15 # 
+     mass 11 # 
+     mass 13 # 
+     mass 15 # 
+     mass 2 # 
+     mass 4 # 
+     mass 1 # 
+     mass 3 # 
+</zero>
+<one>
+</one>
+<identical>
+</identical>
+<opposite>
+</opposite>
+<constraint>
+</constraint>
+</file>
