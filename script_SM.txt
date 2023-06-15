@@ -1,0 +1,16 @@
+import model ./SMEFTsim_U35_MwScheme_UFO-SMlimit_massless
+generate a a > w+ w- h QED<=3, w+ > l+ vl, w- > l- vl~, h > b b~
+output SM
+launch
+shower = OFF 
+detector = OFF 
+analysis = ExRoot
+madspin = OFF
+reweight = OFF
+done 
+set lpp1 2
+set lpp2 2
+set pdlabel1 none
+set pdlabel2 none
+set use_syst False
+done
