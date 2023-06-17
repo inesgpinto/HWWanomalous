@@ -39,7 +39,7 @@ CP_PAR = particle_tree_CP_PAR.arrays(particle_tree_CP_PAR.keys(), library="pd")
 #Defining the functions to calculate new variables
 
 
-def delta_eta(df):
+def delta_eta_leptons(df):
     """Difference between the two leptons"""
     lepton1 = df[df['Particle.PID'].isin([-11, -13, -15])]
     lepton2 = df[df['Particle.PID'].isin([11, 13, 15])]
@@ -47,7 +47,7 @@ def delta_eta(df):
     
     return etas_diff
 
-def delta_phi(df):
+def delta_phi_leptons(df):
     """Difference between the two leptons"""
     lepton1 = df[df['Particle.PID'].isin([-11, -13, -15])]
     lepton2 = df[df['Particle.PID'].isin([11, 13, 15])]
@@ -55,10 +55,31 @@ def delta_phi(df):
     
     return phis_diff
 
+
+def delta_eta_neutrinos(df):
+    """Difference between the two leptons"""
+    lepton1 = df[df['Particle.PID'].isin([-12, -14, -16])]
+    lepton2 = df[df['Particle.PID'].isin([12, 14, 16])]
+    etas_diff = lepton2['Particle.Eta'].iloc[0] - lepton1['Particle.Eta'].iloc[0]
+    
+    return etas_diff
+
+def delta_phi_neutrinos(df):
+    """Difference between the two leptons"""
+    lepton1 = df[df['Particle.PID'].isin([-12, -14, -16])]
+    lepton2 = df[df['Particle.PID'].isin([12, 14, 16])]
+    phis_diff = lepton2['Particle.Phi'].iloc[0] - lepton1['Particle.Phi'].iloc[0]
+    
+    return phis_diff
+
 def pt_WW(df):
 
     w_bosons = df[df['Particle.PID'].isin([24, -24])]
-    pt_WW = (w_bosons.iloc[0]['Particle.PT'] + w_bosons.iloc[1]['Particle.PT'])
+    
+    px_WW = (w_bosons.iloc[0]['Particle.Px'] + w_bosons.iloc[1]['Particle.Px'])
+    py_WW = (w_bosons.iloc[0]['Particle.Py'] + w_bosons.iloc[1]['Particle.Py'])
+    
+    pt_WW = np.sqrt(px_WW**2 + py_WW**2)
     
     return pt_WW
 
@@ -67,8 +88,10 @@ def pt_WWH(df):
     w_bosons = df[df['Particle.PID'].isin([24, -24])]
     higgs = df[df['Particle.PID'] == 25]
     
-    pt_WWH = (w_bosons.iloc[0]['Particle.PT'] + w_bosons.iloc[1]['Particle.PT'] + higgs.iloc[0]['Particle.PT'])
+    px_WWH = (w_bosons.iloc[0]['Particle.Px'] + w_bosons.iloc[1]['Particle.Px'] + higgs.iloc[0]['Particle.Px'])
+    py_WWH = (w_bosons.iloc[0]['Particle.Py'] + w_bosons.iloc[1]['Particle.Py'] + higgs.iloc[0]['Particle.Py'])
     
+    pt_WWH = np.sqrt(px_WWH**2 + py_WWH**2)
     return pt_WWH
 
 
@@ -104,22 +127,26 @@ def m_WWH(df):
 #Create a dataframe with the new variables
 
 def new_variables(dataframe):
-    etas = []
-    phis = []
+    etas_leptons = []
+    phis_leptons = []
+    etas_neutrinos = []
+    phis_neutrinos = []
     pts_WW = []
     pts_WWH = []
     ms_WW = []
     ms_WWH = []
     
     for entry, new_df in dataframe.groupby(level=0):
-        etas.append(delta_eta(new_df))
-        phis.append(delta_phi(new_df))
+        etas_leptons.append(delta_eta_leptons(new_df))
+        phis_leptons.append(delta_phi_leptons(new_df))
+        etas_neutrinos.append(delta_eta_neutrinos(new_df))
+        phis_neutrinos.append(delta_phi_neutrinos(new_df))
         pts_WW.append(pt_WW(new_df))
         pts_WWH.append(pt_WWH(new_df))
         ms_WW.append(m_WW(new_df))
         ms_WWH.append(m_WWH(new_df))
 
-    new_variables = pd.DataFrame({'delta_eta': etas, 'delta_phi': phis, 'pt_WW': pts_WW, 'pt_WWH': pts_WWH, 'm_WW': ms_WW, 'm_WWH': ms_WWH})
+    new_variables = pd.DataFrame({'delta_eta_leptons': etas_leptons, 'delta_phi_leptons': phis_leptons,'delta_eta_neutrinos': etas_neutrinos, 'delta_phi_neutrinos': phis_neutrinos, 'pt_WW': pts_WW, 'pt_WWH': pts_WWH, 'm_WW': ms_WW, 'm_WWH': ms_WWH})
     
     return new_variables
 
