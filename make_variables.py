@@ -64,6 +64,26 @@ def delta_phi_leptons(df):
     
     return phis_diff
 
+def delta_eta_b(df):
+    
+    b1 = df[df['Particle.PID'].isin([-5])]
+    b2 = df[df['Particle.PID'].isin([5])]
+    etas_diff = b2['Particle.Eta'].iloc[0] - b1['Particle.Eta'].iloc[0]
+    return etas_diff
+
+def delta_phi_b(df):
+    
+    b1 = df[df['Particle.PID'].isin([-5])]
+    b2 = df[df['Particle.PID'].isin([5])]
+    phis_diff = b2['Particle.Phi'].iloc[0] - b1['Particle.Phi'].iloc[0]
+
+    while (phis_diff >= math.pi): 
+        phis_diff -= (2*math.pi)
+    while (phis_diff < - math.pi): 
+        phis_diff += (2*math.pi) 
+    
+    return phis_diff
+
 
 def delta_eta_neutrinos(df):
     """Difference between the two leptons"""
@@ -171,6 +191,8 @@ def new_variables(dataframe):
     ms_WWH = []
     pts_wplus = []
     pts_wminus = []
+    b_phi = []
+    b_eta = []
     
     for entry, new_df in dataframe.groupby(level=0):
         etas_leptons.append(delta_eta_leptons(new_df))
@@ -183,10 +205,12 @@ def new_variables(dataframe):
         ms_WWH.append(m_WWH(new_df))
         pts_wplus.append(pt_wplus(new_df))
         pts_wminus.append(pt_wminus(new_df))
+        b_phi.append(delta_phi_b(new_df))
+        b_eta.append(delta_eta_b(new_df))
 
 
     new_variables = pd.DataFrame({'delta_eta_leptons': etas_leptons, 'delta_phi_leptons': phis_leptons,'delta_eta_neutrinos': etas_neutrinos, 'delta_phi_neutrinos': phis_neutrinos, 'pt_WW': pts_WW, 'pt_WWH': pts_WWH, 'm_WW': ms_WW, 'm_WWH': ms_WWH,
-                                  'pt_wplus':pts_wplus,'pt_wminus':pts_wminus})
+                                  'pt_wplus':pts_wplus,'pt_wminus':pts_wminus, 'delta_eta_b':b_eta, 'delta_phi_b': b_phi})
     
     return new_variables
 
