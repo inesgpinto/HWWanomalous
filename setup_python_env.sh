@@ -1,0 +1,1 @@
+source /lstore/titan/atlas/inesgpinto/envs/venv_ad/bin/activate
