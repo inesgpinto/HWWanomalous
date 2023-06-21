@@ -60,6 +60,8 @@ def objective(trial):
     n_layers = trial.suggest_int("n_layers", 5, 20)
     dropout_rate = trial.suggest_categorical("dropout_rate", [0.1,0.15,0.20,0.25,0.3,0.35,0.4])
     lr = trial.suggest_float("lr", 1e-8, 1e-2, log=True)
+    weight_decay = trial.suggest_categorical("weight_decay", [0.0, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3])
+    clipnorm = trial.suggest_categorical("clipnorm", [None, 0.01, 0.1, 1.0, 10.0, 100.0])
 
     model = Sequential()
 
@@ -69,7 +71,7 @@ def objective(trial):
         
     model.add(Dense(3, activation='softmax'))
 
-    optimizer = tf.keras.optimizers.Adam(learning_rate=lr)
+    optimizer = tf.keras.optimizers.AdamW(learning_rate=lr, weight_decay=weight_decay, clipnorm=clipnorm)
 
     model.compile(loss='categorical_crossentropy', 
               optimizer=optimizer,
