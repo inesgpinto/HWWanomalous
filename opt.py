@@ -59,7 +59,7 @@ def objective(trial):
     n_units = trial.suggest_int("n_units", 15, 256)
     n_layers = trial.suggest_int("n_layers", 5, 20)
     dropout_rate = trial.suggest_categorical("dropout_rate", [0.1,0.15,0.20,0.25,0.3,0.35,0.4])
-    lr = trial.suggest_float("r", 1e-8, 1e-2, log=True)
+    lr = trial.suggest_float("lr", 1e-8, 1e-2, log=True)
 
     model = Sequential()
 
@@ -99,7 +99,7 @@ BEST_HISTORY = None
 
 study = optuna.create_study(study_name=f"nn", direction="minimize")
 
-for epochs in [50,100]:
+for epochs in [50,100,250,500,1000,1500,2000,2500]:
     MAX_EPOCHS = epochs
     study.optimize(objective, n_trials=N_TRIALS, catch=())
 
