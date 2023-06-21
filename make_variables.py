@@ -180,11 +180,41 @@ def delta_phi_wplus_ln (df):
     return interval(phis_diff)
 
 def delta_eta_wplus_ln (df):
-    leptons = df[df['Particle.PID'].isin([-11, -13, -15])]
-    neutrinos = df[df['Particle.PID'].isin([12,  14,  16])]
-    Etas_diff = leptons['Particle.Eta'].iloc[0] - neutrinos['Particle.Eta'].iloc[0]
-   
+
+    leptons = [11, 13, 15]
+    neutrinos = [-12,  -14,  -16]
+
+    for l, mu in zip (leptons,neutrinos):
+        lepton = df[df['Particle.PID']==l]
+        neutrino = df[df['Particle.PID']==mu]
+
+        #print(len(lepton))
+        #print(len(neutrino))
+        if (len(lepton)==1 and len(neutrino)==1):
+
+            
+            Etas_diff = lepton.iloc[0]['Particle.Eta'] - neutrino.iloc[0]['Particle.Eta']
+        #else:
+            #print("aaa")
     return Etas_diff
+
+def lep_4momentum_cart(df):
+    lep = df[df['Particle.PID'].isin([11, 13, 15])]
+    lep_px = lep.iloc[0]['Particle.Px']
+    lep_py = lep.iloc[0]['Particle.Py']
+    lep_pz = lep.iloc[0]['Particle.Pz']
+    lep_e = lep.iloc[0]['Particle.E']
+
+    return [lep_px,lep_py,lep_pz,lep_e]
+
+def b_4momentum_cart(df):
+    b = df[df['Particle.PID']==5]
+    b_px = b.iloc[0]['Particle.Px']
+    b_py = b.iloc[0]['Particle.Py']
+    b_pz = b.iloc[0]['Particle.Pz']
+    b_e = b.iloc[0]['Particle.E']
+
+    return [b_px,b_py,b_pz,b_e]
 
 
 #Create a dataframe with the new variables
@@ -204,6 +234,15 @@ def new_variables(dataframe):
     b_eta = []
     phis_wplus_ln = []
     etas_wplus_ln = [] 
+    b_px = []
+    b_py = []
+    b_pz = []
+    b_e = []
+
+    lep_px = []
+    lep_py = []
+    lep_pz = []
+    lep_e = []
 
     for entry, new_df in dataframe.groupby(level=0):
         etas_leptons.append(delta_eta_leptons(new_df))
@@ -221,12 +260,28 @@ def new_variables(dataframe):
         phis_wplus_ln.append(delta_phi_wplus_ln(new_df))
         etas_wplus_ln.append(delta_eta_wplus_ln(new_df))
 
+        b4 = b_4momentum_cart(new_df)
+        b_px.append(b4[0])
+        b_py.append(b4[1])
+        b_pz.append(b4[2])
+        b_e.append(b4[3])
+
+        lep4 = lep_4momentum_cart(new_df)
+        lep_px.append(lep4[0])
+        lep_py.append(lep4[1])
+        lep_pz.append(lep4[2])
+        lep_e.append(lep4[3])
+
+
 
 
     new_variables = pd.DataFrame({'delta_eta_leptons': etas_leptons, 'delta_phi_leptons': phis_leptons,'delta_eta_neutrinos': etas_neutrinos, 'delta_phi_neutrinos': phis_neutrinos, 'pt_WW': pts_WW, 'pt_WWH': pts_WWH, 'm_WW': ms_WW, 'm_WWH': ms_WWH,
                                   'pt_wplus':pts_wplus,'pt_wminus':pts_wminus, 'delta_eta_b':b_eta, 'delta_phi_b': b_phi,
                                   'delta_phi_lepton_neutrino':phis_wplus_ln,
-                                  'delta_eta_lepton_neutrino':etas_wplus_ln})
+                                  'delta_eta_lepton_neutrino':etas_wplus_ln,
+                                  'b_px':b_px, 'b_py':b_py, 'b_pz':b_pz, 'b_e':b_e ,
+                                  'lep_px':lep_px, 'lep_py':lep_py, 'lep_pz':lep_pz, 'lep_e':lep_e 
+                                  })
     
     return new_variables
 
