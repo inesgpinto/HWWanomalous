@@ -32,6 +32,20 @@ if FEATURE_COS:
         if 'phi' in feature:
             data [f'cos_{feature}'] = np.cos( data[feature] )
             train_features.append(f'cos_{feature}')
+
+            plt.figure(figsize=(8, 6))
+            bins = 50
+
+            bins = plt.hist(data.query(f'sample == "SM"')[f'cos_{feature}'], bins=bins, histtype='step', density=True, color='steelblue', lw=1.5, label='SM')
+            plt.hist(data.query(f'sample == "CP IMPAR"')[f'cos_{feature}'], bins=bins[1], histtype='step', density=True, color='purple', lw=1.5, label='CP_odd')
+            plt.hist(data.query(f'sample == "CP PAR"')[f'cos_{feature}'], bins=bins[1], histtype='step', density=True, color='green', lw=1.5, label='CP_even')
+
+
+            plt.xlabel(f'cos_{feature}')
+            plt.legend()
+            plt.savefig(f'plots/cos_{feature}_histogram.png', transparent=False)
+            plt.close()
+
         else: train_features.append(feature)
 else: 
     name = ''
