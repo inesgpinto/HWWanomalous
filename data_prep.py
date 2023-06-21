@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from config import *
 
 print("opening files")
 SM = pd.read_hdf("data/sm.h5", key='table',mode='r')
@@ -15,9 +16,14 @@ SM["sample"]="SM"
 CP_PAR["sample"]="CP PAR"
 CP_IMPAR["sample"]="CP IMPAR"
 
-SM["label"]=0
-CP_PAR["label"]=1
-CP_IMPAR["label"]=2
+if N_CLASSES == 3:
+    SM["label"]=0
+    CP_PAR["label"]=1
+    CP_IMPAR["label"]=2
+elif N_CLASSES == 2:
+    SM["label"]=0
+    CP_PAR["label"]=1
+    CP_IMPAR["label"]=1
 
 
 print("Merging into single dataframe")
@@ -41,10 +47,22 @@ indexes_splits = np.split( data.sample(frac=1, random_state=RANDOM_SEED).index,
 for splitname, indexes in zip(splits, indexes_splits):
     data.loc[indexes, "gen_split"] = splitname
 
-for splitname in splits:
-    for sample in data["sample"].unique():
-        n_events = len(data.query(f'sample =="{sample}" & gen_split == "{splitname}"'))
-        print(f'{splitname} {sample} \t: {n_events} events')
+if N_CLASSES == 3:
+    for splitname in splits:
+        for sample in data["sample"].unique():
+            n_events = len(data.query(f'sample =="{sample}" & gen_split == "{splitname}"'))
+            print(f'{splitname} {sample} \t: {n_events} events')
+
+if N_CLASSES == 2:
+    data['train_weight']=1
+    for splitname in splits:
+        for sample in data["sample"].unique():
+            n_events = len(data.query(f'sample =="{sample}" & gen_split == "{splitname}"'))
+            data.query(f'sample =="{sample}" & gen_split == "{splitname}"')['train_weight'] = 1./n_events
+    
+
+
+
 
 print("saving data")
 data.to_hdf("data/data_ml.h5", key='table',mode='w')
