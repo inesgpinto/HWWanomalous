@@ -71,7 +71,7 @@ def objective(trial):
         
     model.add(Dense(3, activation='softmax'))
 
-    optimizer = tf.keras.optimizers.AdamW(learning_rate=lr, weight_decay=weight_decay, clipnorm=clipnorm)
+    optimizer = tfa.optimizers.AdamW(learning_rate=lr, weight_decay=weight_decay, clipnorm=clipnorm)
 
     model.compile(loss='categorical_crossentropy', 
               optimizer=optimizer,
