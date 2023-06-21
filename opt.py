@@ -23,6 +23,19 @@ print("Reading file")
 data = pd.read_hdf("data/data_ml.h5", key='table',mode='r')
 
 train_features = TRAIN_FEATURES
+
+if FEATURE_COS:
+    name = '_cos'
+    train_features = []
+    for feature in TRAIN_FEATURES:
+        if 'phi' in feature:
+            data [f'cos_{feature}'] = np.cos( data[feature] )
+            train_features.append(f'cos_{feature}')
+        else: train_features.append(feature)
+else: 
+    name = ''
+
+
 print(train_features)
 
 data_train = data.query(" gen_split == 'train' ")
@@ -90,8 +103,8 @@ def objective(trial):
     if trial_value < BEST_VALUE:
         BEST_VALUE = trial_value
         BEST_HISTORY = history
-        model.save(f"models/model.h5")
-        model.save(f"models/model", save_format="tf")
+        model.save(f"models/nn{name}.h5")
+        model.save(f"models/nn{name}", save_format="tf")
         print("New best model found and saved. Current best value: ", BEST_VALUE)
 
     return trial_value
@@ -99,13 +112,13 @@ def objective(trial):
 BEST_VALUE = np.inf
 BEST_HISTORY = None
 
-study = optuna.create_study(study_name=f"nn", direction="minimize")
+study = optuna.create_study(study_name=f"nn{name}", direction="minimize")
 
 for epochs in [50,100,250,500,1000,1500,2000,2500]:
     MAX_EPOCHS = epochs
     study.optimize(objective, n_trials=N_TRIALS, catch=())
 
-study.trials_dataframe().sort_values(by="value").to_csv(f"models/optuna_trials_model.csv")
+study.trials_dataframe().sort_values(by="value").to_csv(f"models/optuna_trials_nn{name}.csv")
 
 history = BEST_HISTORY
 
@@ -117,7 +130,7 @@ plt.title('Training and Validation Loss')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
-plt.savefig(f'models/history_loss.png', transparent=False)
+plt.savefig(f'models/nn{name}_history_loss.png', transparent=False)
 plt.show()
 
 plt.figure(figsize=(8, 6))
@@ -127,5 +140,5 @@ plt.title('Training and Validation Accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
-plt.savefig(f'models/history_acc.png', transparent=False)
+plt.savefig(f'models/nn{name}_history_acc.png', transparent=False)
 plt.show()

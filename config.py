@@ -8,4 +8,6 @@ GPU = True
 
 MAX_EPOCHS = 100
 
-N_TRIALS = 10
+N_TRIALS = 15
+
+FEATURE_COS = True

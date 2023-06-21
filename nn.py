@@ -9,6 +9,7 @@ import os
 from sklearn.preprocessing import StandardScaler
 import pickle
 import matplotlib.pyplot as plt
+import math
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
@@ -22,7 +23,21 @@ print("Reading file")
 data = pd.read_hdf("data/data_ml.h5", key='table',mode='r')
 
 train_features = TRAIN_FEATURES
+
+
+if FEATURE_COS:
+    name = '_cos'
+    train_features = []
+    for feature in TRAIN_FEATURES:
+        if 'phi' in feature:
+            data [f'cos_{feature}'] = np.cos( data[feature] )
+            train_features.append(f'cos_{feature}')
+        else: train_features.append(feature)
+else: 
+    name = ''
+
 print(train_features)
+
 
 data_train = data.query(" gen_split == 'train' ")
 data_val   = data.query(" gen_split == 'val'   ")
@@ -66,8 +81,8 @@ history = model.fit(X_train,
                     validation_data=(X_val, y_val_onehot), 
                     callbacks= EarlyStopping)
 
-model.save(f"models/model.h5")
-model.save(f"models/model", save_format="tf")
+model.save(f"models/nn{name}.h5")
+model.save(f"models/nn{name}", save_format="tf")
 
 
 
@@ -79,7 +94,7 @@ plt.title('Training and Validation Loss')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
-plt.savefig(f'models/history_loss.png', transparent=False)
+plt.savefig(f'models/nn{name}_history_loss.png', transparent=False)
 plt.show()
 
 plt.figure(figsize=(8, 6))
@@ -89,6 +104,5 @@ plt.title('Training and Validation Accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
-plt.savefig(f'models/history_acc.png', transparent=False)
+plt.savefig(f'models/nn{name}_history_acc.png', transparent=False)
 plt.show()
-
