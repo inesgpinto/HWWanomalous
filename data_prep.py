@@ -47,23 +47,37 @@ indexes_splits = np.split( data.sample(frac=1, random_state=RANDOM_SEED).index,
 for splitname, indexes in zip(splits, indexes_splits):
     data.loc[indexes, "gen_split"] = splitname
 
+print(N_CLASSES)
+
 if N_CLASSES == 3:
     for splitname in splits:
         for sample in data["sample"].unique():
             n_events = len(data.query(f'sample =="{sample}" & gen_split == "{splitname}"'))
             print(f'{splitname} {sample} \t: {n_events} events')
 
+    print("saving data")
+    data.to_hdf("data/data_ml.h5", key='table',mode='w')
+
 if N_CLASSES == 2:
     data['train_weight']=1
     for splitname in splits:
+        for sample in data["category"].unique():
+            n_events = len(data.query(f'category =="{sample}" & gen_split == "{splitname}"'))
+            #print(n_events)
+            idx = data.query(f'category =="{sample}" & gen_split == "{splitname}"').index
+
+            n_events = len(data.loc[idx])
+
+            data.loc[idx,'train_weight'] = 1./n_events
+
+
+
+
+    for splitname in splits:
         for sample in data["sample"].unique():
-            n_events = len(data.query(f'sample =="{sample}" & gen_split == "{splitname}"'))
-            data.query(f'sample =="{sample}" & gen_split == "{splitname}"')['train_weight'] = 1./n_events
-    
+            weight_sum = data.query(f'sample =="{sample}" & gen_split == "{splitname}"')['train_weight'].sum()
 
+            print(f'{splitname} {sample} \t: {weight_sum} weight sum')
 
-
-
-print("saving data")
-data.to_hdf("data/data_ml.h5", key='table',mode='w')
-
+    print("saving data")
+    data.to_hdf("data/data_ml_2class.h5", key='table',mode='w')   

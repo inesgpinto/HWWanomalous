@@ -15,7 +15,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 if GPU: 
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-    os.environ["CUDA_VISIBLE_DEVICES"] = os.environ.get("GPU", "0")
+    os.environ["CUDA_VISIBLE_DEVICES"] = os.environ.get("GPU", "1")
     physical_devices = tf.config.list_physical_devices("GPU")
     tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
@@ -31,7 +31,7 @@ if FEATURE_COS:
         if 'phi' in feature:
             data [f'cos_{feature}'] = np.cos( data[feature] )
             train_features.append(f'cos_{feature}')
-            
+
             plt.figure(figsize=(8, 6))
             bins = 50
 
@@ -65,7 +65,7 @@ X_train = data_train[train_features].values
 
 print("Standard Scaler")
 scaler = StandardScaler().fit(X_train)
-with open(f'models/ae_scaler.pck','wb') as f:
+with open(f'models/nn{name}scaler.pck','wb') as f:
     pickle.dump(scaler,f)
 
 X_train = scaler.transform(data_train[train_features].values)

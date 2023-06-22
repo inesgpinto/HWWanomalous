@@ -67,7 +67,7 @@ X_train = data_train[train_features].values
 
 print("Standard Scaler")
 scaler = StandardScaler().fit(X_train)
-with open(f'models/ae_scaler.pck','wb') as f:
+with open(f'models/nn{name}scaler.pck','wb') as f:
     pickle.dump(scaler,f)
 
 X_train = scaler.transform(data_train[train_features].values)
